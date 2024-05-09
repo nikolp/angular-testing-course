@@ -41,7 +41,7 @@ describe('DemoDropdownsComponent', () => {
         expect(component).toBeTruthy();
     });
 
-    fit('should populate dropdown 1', () => {
+    it('should populate dropdown 1', () => {
         dropdownService.getOptions1.and.returnValue(of([
             {value: 'a', label: 'a'},
             {value: 'b', label: 'b'},
@@ -51,7 +51,7 @@ describe('DemoDropdownsComponent', () => {
             {value: '1', label: '1'}
         ]));
         fixture.detectChanges();
-        
+
         const dropDowns = el.queryAll(By.css("mat-select"));
         expect(dropDowns.length).toBe(2);
         const dropDown1 = dropDowns[0];
