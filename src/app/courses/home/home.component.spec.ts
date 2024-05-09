@@ -70,6 +70,14 @@ describe('HomeComponent', () => {
 
       expect(tabs.length).toBe(1, "Unexpected number of tabs found");
 
+      const tab = tabs[0];
+
+      const label = tab.query(By.css(".mdc-tab__text-label"));
+
+      expect(label).toBeTruthy("could not find the exact label by css selector");
+
+      expect(label.nativeElement.textContent).toBe("Beginners");
+
   });
 
 
