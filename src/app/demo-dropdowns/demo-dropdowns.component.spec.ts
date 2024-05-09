@@ -1,11 +1,12 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, flush, flushMicrotasks, tick, waitForAsync } from '@angular/core/testing';
 import { DebugElement } from '@angular/core';
 import { DemoDropdownsComponent } from './demo-dropdowns.component';
 import { CoursesModule } from '../courses/courses.module';
 import { By } from '@angular/platform-browser';
 import { DropdownService } from '../courses/services/dropdown.service';
-import { of } from 'rxjs';
+import { of, timer } from 'rxjs';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { delay, map } from 'rxjs/operators';
 
 
 describe('DemoDropdownsComponent', () => {
@@ -73,5 +74,34 @@ describe('DemoDropdownsComponent', () => {
         // expect(optionValues1[1].nativeElement.textContent).toBe(" b ");
         // expect(optionValues1[2].nativeElement.textContent).toBe(" c ");
     });
+
+    it('should populate dropdown 1 after a delay waitForAsync', waitForAsync(() => {
+        dropdownService.getOptions1.and.returnValue(
+            of([
+            {value: 'a', label: 'a'},
+            {value: 'b', label: 'b'},
+            {value: 'c', label: 'c'}
+            ]).pipe(delay(1000)));
+        dropdownService.getOptions2.and.returnValue(of([
+            {value: '1', label: '1'}
+        ]));
+        fixture.detectChanges();  // handle box2 whose data arrived immediately
+
+        const dropDowns = el.queryAll(By.css("mat-select"));
+        expect(dropDowns.length).toBe(2);
+        const dropDown1 = dropDowns[0];
+
+        fixture.whenStable().then(
+            () => {
+                // handle box1 whose data just arrived
+                fixture.detectChanges();
+                dropDown1.nativeElement.click();
+                fixture.detectChanges();
+                const options1 = dropDown1.queryAll(By.css("mat-option"));
+                expect(options1.length).toBe(3);
+            }
+        )
+
+    }));
 
 });
