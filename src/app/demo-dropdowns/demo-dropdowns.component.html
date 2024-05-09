@@ -1,0 +1,24 @@
+<div class="container demo-dropdowns">
+
+  <h1>Hello!</h1>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Select an option</mat-label>
+    <mat-select [(value)]="selectedOption1" (selectionChange)="onSelectionChange1($event.value)">
+      <mat-option *ngFor="let option of choices1" [value]="option.value">
+        {{ option.label }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>  
+
+  <mat-form-field appearance="fill">
+    <mat-label>Select an option</mat-label>
+    <mat-select [(value)]="selectedOption2" (selectionChange)="onSelectionChange2($event.value)">
+      <mat-option *ngFor="let option of choices2" [value]="option.value">
+        {{ option.label }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>  
+
+</div>
+
