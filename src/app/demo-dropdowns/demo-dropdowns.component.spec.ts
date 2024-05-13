@@ -42,7 +42,7 @@ describe('DemoDropdownsComponent', () => {
         expect(component).toBeTruthy();
     });
 
-    it('should populate dropdown 1', () => {
+    it('should populate dropdown 1 - synhronous', () => {
         dropdownService.getOptions1.and.returnValue(of([
             {value: 'a', label: 'a'},
             {value: 'b', label: 'b'},
@@ -99,9 +99,41 @@ describe('DemoDropdownsComponent', () => {
                 fixture.detectChanges();
                 const options1 = dropDown1.queryAll(By.css("mat-option"));
                 expect(options1.length).toBe(3);
+                expect(options1[0].nativeElement.textContent).toBe(" a ");
             }
         )
 
+    }));
+
+    it('should populate dropdown 1 after a delay fakeAsync', fakeAsync(() => {
+        const delayMs: number = 500;
+        const data1 = [
+            {value: "a", label: "a"}, 
+            {value: "b", label: "b"},
+            {value: "c", label: "c"}];
+        dropdownService.getOptions1.and.returnValue(
+            // timer returns the value 0 after the given delay
+            // then we take that value and ignore it, 
+            // we re-map it to return the data we really want for our Observable
+            timer(delayMs).pipe(map(() => data1)));
+
+        dropdownService.getOptions2.and.returnValue(of([
+            {value: '1', label: '1'}
+        ]));
+        fixture.detectChanges();  // handle box2 whose data arrived immediately
+
+        const dropDowns = el.queryAll(By.css("mat-select"));
+        expect(dropDowns.length).toBe(2);
+        const dropDown1 = dropDowns[0];
+
+        // simulate passage of time enough for data1 to arrive
+        tick(delayMs);
+        fixture.detectChanges();
+        dropDown1.nativeElement.click();
+        fixture.detectChanges();
+        const options1 = dropDown1.queryAll(By.css("mat-option"));
+        expect(options1.length).toBe(3);
+        expect(options1[0].nativeElement.textContent).toBe(" a ");
     }));
 
 });
