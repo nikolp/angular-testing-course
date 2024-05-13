@@ -15,8 +15,6 @@ export class DemoDropdownsComponent implements OnInit {
   choices2: DropdownOption[] = [];
   selectedOption2: DropdownOption | null = null;
 
-  choices3: DropdownOption[] = [];
-
   constructor(private dropdownService: DropdownService) { }
 
   ngOnInit() {
@@ -32,7 +30,6 @@ export class DemoDropdownsComponent implements OnInit {
         this.choices2 = data;
       }
     );
-    this.choices3 = [{value: "FOO", label: 'FOO'}];
   }
 
   onSelectionChange1(option: DropdownOption) {
