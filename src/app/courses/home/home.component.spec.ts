@@ -21,7 +21,7 @@ describe('HomeComponent', () => {
   let fixture: ComponentFixture<HomeComponent>;
   let component:HomeComponent;
   let el: DebugElement;
-  let coursesService: any;
+  let coursesService: jasmine.SpyObj<CoursesService>; // if use any no auto-complete
 
   const beginnerCourses = setupCourses()
       .filter(course => course.category == 'BEGINNER');
@@ -48,7 +48,7 @@ describe('HomeComponent', () => {
               fixture = TestBed.createComponent(HomeComponent);
               component = fixture.componentInstance;
               el = fixture.debugElement;
-              coursesService = TestBed.inject(CoursesService);
+              coursesService = TestBed.inject(CoursesService) as jasmine.SpyObj<CoursesService>;
           });
 
   }));
